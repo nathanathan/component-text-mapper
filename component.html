@@ -1,0 +1,91 @@
+<polymer-element name="ceci-text-input" attributes="inputname placeholdertext emitonchange label" extends="ceci-element" placeholdertext="Placeholder" inputname="Text Input">
+  <template>
+    <link rel="stylesheet" href="component.css">
+    <input id="inputText" type="text" on-input="{{input}}" on-keypress="{{keypress}}" /><button id="button" on-click="{{submit}}"></button>
+    <shadow></shadow>
+    <script type="text/json" id="ceci-definition">
+      {
+        "tags": ["input", "form"],
+        "thumbnail": "./thumbnail.png",
+        "broadcasts": {
+          "sendData": {
+            "label": "Send Data",
+            "description": "Occurs when button is clicked or Enter key is pressed.",
+            "default": true
+          }
+        },
+        "listeners": {
+          "click": {
+            "description": "Causes a fake click event to occur.",
+            "label": "Send Data"
+          }
+        },
+        "attributes": {
+          "inputname": {
+            "label": "Input Name",
+            "description": "The name of this field, helpful when saving data.",
+            "editable": "text",
+            "listener": true,
+            "defaultListener": false
+          },
+          "placeholdertext": {
+            "label": "Placeholder Text",
+            "description": "The text you want your input field to show by default.",
+            "editable": "text",
+            "listener": true
+          },
+          "emitonchange": {
+            "label": "Emit on change",
+            "description": "Background color of the button while it is being clicked or tapped.",
+            "editable": "boolean",
+            "listener": true
+          }
+        }
+      }
+    </script>
+  </template>
+  <description>
+    A text input that broadcasts whatever a user types.
+  </description>
+  <script>
+    Polymer('ceci-text-input', {
+      emitonchange:false,
+      ready: function () {
+        this.super();
+
+        var that = this;
+        this.$.button.innerHTML = "Submit";
+      },
+      submit: function () {
+        this.broadcast('sendData', this.$.inputText.value);
+        this.$.inputText.value = "";
+      },
+      input: function (e) {
+        if (!this.emitonchange) {
+          return;
+        }
+        this.broadcast('sendData', this.$.inputText.value);
+      },
+      keypress: function (e) {
+        if (!this.emitonchange) {
+          if (e.keyCode == 13) {
+            this.broadcast('sendData', this.$.inputText.value);
+            this.$.inputText.value = '';
+          }
+        }
+      },
+      emitonchangeChanged: function(oldValue, newValue) {
+        this.classList.toggle('onchange');
+        this.$.button.classList.toggle('hidden');
+      },
+      placeholdertextChanged: function(oldValue, newValue) {
+        if (this.$.inputText.hasAttribute('placeholder')) {
+          this.$.inputText.setAttribute("placeholder", newValue);
+        }
+        else {
+          this.$.inputText.setAttribute("placeholder", newValue);
+        }
+      }
+    });
+  </script>
+</polymer-element>
