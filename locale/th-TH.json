@@ -1,0 +1,12 @@
+{
+	"ceci-text-input": "กล่องป้อนข้อความ",
+	"ceci-text-input/button": "ส่ง",
+	"ceci-text-input/attributes/inputname" : "ป้อนข้อความ",
+	"ceci-text-input/attributes/inputname/label" : "ชื่อของท่าน",
+	"ceci-text-input/attributes/inputname/description" : "ชื่อของเขตข้อมูลนี้เป็นประโยชน์เมื่อมีการบันทึกข้อมูล",
+	"ceci-text-input/attributes/placeholdertext" : "ตัวยึด",
+	"ceci-text-input/attributes/placeholdertext/label" : "ข้อความตัวยึด",
+	"ceci-text-input/attributes/placeholdertext/description" : "ข้อความที่คุณต้องการช่องใส่ของคุณเพื่อแสดงโดยค่าเริ่มต้น",
+	"ceci-text-input/attributes/emitonchange/label" : "ปล่อยการเปลี่ยนแปลง",
+	"ceci-text-input/attributes/emitonchange/description" : "สีพื้นหลังของปุ่มในขณะที่มันจะถูกคลิกหรือแตะ"
+}
