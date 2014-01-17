@@ -4,8 +4,8 @@
     "ceci-text-input/attributes/inputname": "Entrada de texto",
     "ceci-text-input/attributes/inputname/label": "Nome da entrada",
     "ceci-text-input/attributes/inputname/description": "O nome desse campo, ajuda quando estiver salvando dados.",
-    "ceci-text-input/attributes/placeholdertext": "<em>Placeholder</em>",
-    "ceci-text-input/attributes/placeholdertext/label": "Texto do <em>placeholder</em>",
+    "ceci-text-input/attributes/placeholdertext": "Placeholder",
+    "ceci-text-input/attributes/placeholdertext/label": "Texto do placeholder",
     "ceci-text-input/attributes/placeholdertext/description": "O texto que você quer que seu campo de entrada mostre como padrão.",
     "ceci-text-input/attributes/emitonchange/label": "Enviar sinal ao mudar",
     "ceci-text-input/attributes/emitonchange/description": "Cor de fundo do botão enquanto está sendo clicado ou tocado."
