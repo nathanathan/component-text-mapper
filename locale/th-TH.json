@@ -1,5 +1,6 @@
 {
     "ceci-text-input": "กรอกข้อความ",
+    "ceci-text-input/description": "กล่องรับข้อความที่สามารถเผยแพร่สิ่งที่ผู้ใช้พิมพ์",
     "ceci-text-input/button": "ส่ง",
     "ceci-text-input/attributes/inputname": "กรอกข้อความ",
     "ceci-text-input/attributes/inputname/label": "ชื่อใช้กรอก",
