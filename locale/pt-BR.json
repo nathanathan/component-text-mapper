@@ -1,5 +1,6 @@
 {
     "ceci-text-input": "Entrada de texto",
+    "ceci-text-input/description": "Uma caixa de texto que difunde o que quer que o usuário digite.",
     "ceci-text-input/button": "Enviar",
     "ceci-text-input/attributes/inputname": "Entrada de texto",
     "ceci-text-input/attributes/inputname/label": "Nome da entrada",
