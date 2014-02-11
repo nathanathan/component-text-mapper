@@ -4,7 +4,7 @@
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <button class="delete-rule" on-click="{{removeRule}}">x</button>
+        <button class="delete-rule" on-click="{{removeRule}}" id="{{rule.id}}">x</button>
         <input class="rule-input" type="text" value="{{rule.input}}" />
         <input class="rule-output" type="text" value="{{rule.output}}" />
       </template>
@@ -208,15 +208,14 @@ var fuzzyTemplateMatch = (function(){
       },
       removeRule : function(evt, detail, sender) {
         console.log(evt, detail, sender);
-        /*
         var that = this;
-        that.rules = that.rules.filter(function(){
-          return rule !== thisRule;
+        that.rules = that.rules.filter(function(rule){
+          return rule.id !== sender.id;
         });
-        */
       },
       addRule: function () {
         this.rules.push({
+          id : 'r' + Number(new Date()),
           input : "When there is a message like this...",
           output : "Broadcast this..."
         });
