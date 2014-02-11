@@ -5,8 +5,8 @@
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
         <button class="delete-rule" on-click="{{removeRule}}" id="{{rule.id}}">x</button>
-        <input class="rule-input" type="text" on-keypress={{serializeRules}} value="{{rule.input}}" />
-        <input class="rule-output" type="text" on-keypress={{serializeRules}} value="{{rule.output}}" />
+        <input class="rule-input" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.input}}" />
+        <input class="rule-output" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.output}}" />
       </template>
       <center><button on-click="{{addRule}}">Add Rule</button></center>
     </div>
@@ -232,8 +232,13 @@ var fuzzyTemplateMatch = (function(){
         this.serializeRules();
       },
       serializeRules: function(){
-        //Should probably debounce this...
-        this.persistedRules = JSON.stringify(this.rules);
+        var that = this;
+        if(this.callQueued) return;
+        this.callQueued = true;
+        window.setTimeout(function(){
+          that.persistedRules = JSON.stringify(that.rules);
+          that.callQueued = false;
+        }, 200);
       },
       input: function (inputString) {
         var bestMatch;
