@@ -55,3 +55,20 @@ ceci-text-mapper button:active {
   background: linear-gradient(to top, #ddd, #ddd);
   background: -webkit-linear-gradient(top, #ddd, #ddd);
 }
+ceci-text-mapper .rule-input,
+ceci-text-mapper .rule-output {
+  border-radius: 5px;
+  display: inline-block;
+}
+ceci-text-mapper .rule-input {
+  background-color: turquoise;
+  width: 80%;
+  margin-left: 5px;
+  margin-right: auto;
+}
+ceci-text-mapper .rule-output {
+  background-color: magenta;
+  width: 80%;
+  margin-left: auto;
+  margin-right: 5px;
+}

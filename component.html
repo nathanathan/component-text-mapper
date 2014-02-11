@@ -1,17 +1,13 @@
 <polymer-element name="ceci-text-mapper" attributes="inputname placeholdertext emitonchange label" extends="ceci-element" placeholdertext="Placeholder" inputname="Text Input">
   <template>
     <link rel="stylesheet" href="component.css">
-    <input id="inputText" type="text" on-input="{{input}}" on-keypress="{{keypress}}" /><button id="button" on-click="{{submit}}"></button>
-    <p>When you hear...</p>
-    <p class="test-align: right;">Say...</p>
-    <ul id="rules">
-      <template repeat="{{ rule in rules }}">
-        <li>
-          <p>{{rule.input}}</p>
-          <p class="test-align: right;">{{rule.output}}</p>
-        </li>
+    <p>When there is a message like ... broadcast ...</p>
+    <div id="rules">
+      <template id="rules-template" repeat="{{ rule in rules }}">
+          <input class="rule-input" type="text" on-input="{{input}}" on-keypress="{{keypress}}" value="{{rule.input}}" />
+          <input class="rule-output" type="text" on-input="{{input}}" on-keypress="{{keypress}}" value="{{rule.output}}" />
       </template>
-    </ul>
+    </div>
     <shadow></shadow>
     <script type="text/json" id="ceci-definition">
       {
@@ -204,15 +200,16 @@ var fuzzyTemplateMatch = (function(){
           output : "Hi {{name}}!"
         });
       },
+      /*
       __renderRules: function(){
         var that = this;
         this.rules.forEach(function(rule){
-          var li = document.createElement("li");
+          var li = document.createElement("div");
           li.textContent = rule.input;
           //li.setAttribute("id", "chat-message-" + snapshot.name().substr(1));
           that.$.rules.appendChild(li);
         });
-      },
+      },*/
       addRule: function (rule) {
         rule.outputTemplate = Handlebars.compile(rule.output);
         this.rules.push(rule);
