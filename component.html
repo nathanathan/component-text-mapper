@@ -1,12 +1,12 @@
-<polymer-element name="ceci-text-mapper" attributes="fuzziness" extends="ceci-element">
+<polymer-element name="ceci-text-mapper" attributes="fuzziness" extends="ceci-element" fuzziness=25>
   <template>
     <link rel="stylesheet" href="component.css">
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <button class="delete-rule" on-click="{{rule.removeRule}}">x</button>
-        <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
-        <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
+        <button class="delete-rule" on-click="{{removeRule}}">x</button>
+        <input class="rule-input" type="text" value="{{rule.input}}" />
+        <input class="rule-output" type="text" value="{{rule.output}}" />
       </template>
       <center><button on-click="{{addRule}}">Add Rule</button></center>
     </div>
@@ -206,26 +206,19 @@ var fuzzyTemplateMatch = (function(){
         this.rules = [];
         this.addRule();
       },
-      addRule: function (rule) {
+      removeRule : function(evt, detail, sender) {
+        console.log(evt, detail, sender);
+        /*
         var that = this;
+        that.rules = that.rules.filter(function(){
+          return rule !== thisRule;
+        });
+        */
+      },
+      addRule: function () {
         this.rules.push({
           input : "When there is a message like this...",
-          output : "Broadcast this...",
-          setInput : function(evt){
-            console.log(evt);
-            this.input = evt.target.value();
-          },
-          setOutput : function(evt){
-            console.log(evt);
-            this.output = evt.target.value();
-          },
-          removeRule : function() {
-            console.log("rm");
-            var thisRule = this;
-            that.rules = that.rules.filter(function(){
-              return rule !== thisRule;
-            });
-          }
+          output : "Broadcast this..."
         });
       },
       input: function (inputString) {
