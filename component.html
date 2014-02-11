@@ -1,4 +1,4 @@
-<polymer-element name="ceci-text-mapper" attributes="fuzziness rules" extends="ceci-element" fuzziness=25>
+<polymer-element name="ceci-text-mapper" attributes="fuzziness persistedRules" extends="ceci-element" fuzziness=25>
   <template>
     <link rel="stylesheet" href="component.css">
     <shadow></shadow>
@@ -36,9 +36,10 @@
             "editable": "number",
             "listener": false
           },
-          "rules": {
-            "label": "ruleData",
+          "persistedRules": {
+            "label": "Rule Data",
             "description": "rules array serialized as a string",
+            "editable": "text",
             "listener": false
           }
         }
@@ -207,17 +208,12 @@ var fuzzyTemplateMatch = (function(){
     Polymer('ceci-text-mapper', {
       ready: function () {
         this.super();
-        if(!this.rules) {
-          this.rules = [];
-          this.addRule();
-        }
-        /*
         if(!this.persistedRules) {
           this.rules = [];
           this.addRule();
         } else {
           this.rules = JSON.parse(this.persistedRules);
-        }*/
+        }
       },
       removeRule : function(evt, detail, sender) {
         console.log(evt, detail, sender);
@@ -225,7 +221,7 @@ var fuzzyTemplateMatch = (function(){
         that.rules = that.rules.filter(function(rule){
           return rule.id !== sender.id;
         });
-        //this.serializeRules();
+        this.serializeRules();
       },
       addRule: function () {
         this.rules.push({
@@ -233,11 +229,11 @@ var fuzzyTemplateMatch = (function(){
           input : "When there is a message like this...",
           output : "Broadcast this..."
         });
-        //this.serializeRules();
+        this.serializeRules();
       },
       serializeRules: function(){
-        console.log("test");
-        //this.persistedRules = JSON.stringify(this.rules);
+        //Should probably debounce this...
+        this.persistedRules = JSON.stringify(this.rules);
       },
       input: function (inputString) {
         var bestMatch;
