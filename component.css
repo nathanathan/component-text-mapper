@@ -1,10 +1,6 @@
 :host {
   display: block;
   width: 100%;
-  height: 50px;
-}
-.ceci-text-mapper {
-  height: auto;
 }
 .rule-input,
 .rule-output {
@@ -25,4 +21,5 @@
   width: 80%;
   margin-left: auto;
   margin-right: 5px;
+  margin-bottom: 10px;
 }
