@@ -4,11 +4,11 @@
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <div class="delete-rule" on-click="{{rule.removeRule}}">x</div>
+        <div class="delete-rule" on-click={{rule.removeRule}}>x</div>
         <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
         <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
-      <button on-click={{addRule}}>Add Rule</button>
+      <center><button on-click={{addRule}}>Add Rule</button></center>
     </div>
     <script type="text/json" id="ceci-definition">
       {
@@ -212,6 +212,7 @@ var fuzzyTemplateMatch = (function(){
             this.output = evt.target.value();
           },
           removeRule : function() {
+            console.log("rm");
             var thisRule = this;
             that.rules = that.rules.filter(function(){
               return rule !== thisRule;
