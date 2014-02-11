@@ -1,14 +1,14 @@
-<polymer-element name="ceci-text-mapper" attributes="fuzzymatch" extends="ceci-element">
+<polymer-element name="ceci-text-mapper" attributes="fuzziness" extends="ceci-element">
   <template>
     <link rel="stylesheet" href="component.css">
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <button class="delete-rule" on-click={{rule.removeRule}}>x</button>
+        <button class="delete-rule" on-click="{{rule.removeRule}}">x</button>
         <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
         <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
-      <center><button on-click={{addRule}}>Add Rule</button></center>
+      <center><button on-click="{{addRule}}">Add Rule</button></center>
     </div>
     <script type="text/json" id="ceci-definition">
       {
@@ -30,11 +30,11 @@
           }
         },
         "attributes": {
-          "fuzzymatch": {
-            "label": "Fuzzy Match",
-            "description": "Use fuzzy matching.",
-            "editable": "boolean",
-            "default" : true,
+          "fuzziness": {
+            "label": "Fuzziness",
+            "description": "The maximum amount of fuzzyness (0-100) allowed for string matches",
+            "editable": "number",
+            "default" : 20,
             "listener": false
           }
         }
@@ -45,6 +45,7 @@
   <script>
 //Not sure if relative paths are supported so I'm inlining this:
 var fuzzyTemplateMatch = (function(){
+  var VARIABLE_LD = 0.99;
   function find(arr, fun) {
     for (var i = 0; i < arr.length; i++) {
       if (fun(arr[i])) return arr[i];
@@ -155,8 +156,12 @@ var fuzzyTemplateMatch = (function(){
       });
 
       if (vAtOffset) {
-        pftms.push(setVarRange(vAtOffset.vName, lenA, addLd(0.99, ftmRecurse(lenA - 1, lenB))));
-        pftms.push(startVarRange(vAtOffset.vName, lenA, ftmRecurse(lenA, lenB - 1)));
+        pftms.push(
+          setVarRange(
+            vAtOffset.vName, lenA, addLd(
+              VARIABLE_LD, ftmRecurse(lenA - 1, lenB))));
+        pftms.push(
+          startVarRange(vAtOffset.vName, lenA, ftmRecurse(lenA, lenB - 1)));
       }
       else {
         pftms.push(addLd(1, ftmRecurse(lenA, lenB - 1)));
@@ -183,9 +188,12 @@ var fuzzyTemplateMatch = (function(){
       });
     });
     var result = ftmRecurse(stringyString.length, templateString.length);
+    var varialbeTextLength = 0;
     result.vars.forEach(function(v, i) {
       v.value = stringyString.slice(v.start, v.end);
+      varialbeTextLength += v.value.length;
     });
+    result.adjustedLd = Math.round(result.ld - (varialbeTextLength * VARIABLE_LD));
     return result;
   }
   return fuzzyTemplateMatch;
@@ -234,7 +242,9 @@ var fuzzyTemplateMatch = (function(){
           sofar[curVar.vName] = curVar.value;
           return sofar;
         }, {});
-        this.broadcast('sendOutput', outputTemplate(varMap));
+        if(bestMatch.adjustedLd <= (this.fuzziness/100) * inputString.length) {
+          this.broadcast('sendOutput', outputTemplate(varMap));
+        }
       }
     });
   </script>
