@@ -208,6 +208,7 @@ var fuzzyTemplateMatch = (function(){
     Polymer('ceci-text-mapper', {
       ready: function () {
         this.super();
+        if(!this.rules) this.rules = [];
         this.addRule();
       },
       removeRule : function(evt, detail, sender) {
