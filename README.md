@@ -1,6 +1,9 @@
 component-text-mapper
 ================
 
+Needs max lev distance and a better way to assess match quaity so that vars don't throw it off
+And ask how to persist options
+
 Text mapping component for [Appmaker](https://github.com/mozilla-appmaker/appmaker).
 
 In essence, it allows users to specify a list of rules of the form
