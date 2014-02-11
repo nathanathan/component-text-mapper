@@ -208,7 +208,11 @@ var fuzzyTemplateMatch = (function(){
     Polymer('ceci-text-mapper', {
       ready: function () {
         this.super();
-        if(!this.rules) this.rules = [];
+        if(!this.persistedRules) {
+          this.rules = [];
+        } else {
+          this.rules = JSON.parse(this.persistedRules);
+        }
         this.addRule();
       },
       removeRule : function(evt, detail, sender) {
@@ -217,6 +221,7 @@ var fuzzyTemplateMatch = (function(){
         that.rules = that.rules.filter(function(rule){
           return rule.id !== sender.id;
         });
+        this.persistedRules = JSON.stringify(this.rules);
       },
       addRule: function () {
         this.rules.push({
@@ -224,6 +229,7 @@ var fuzzyTemplateMatch = (function(){
           input : "When there is a message like this...",
           output : "Broadcast this..."
         });
+        this.persistedRules = JSON.stringify(this.rules);
       },
       input: function (inputString) {
         var bestMatch;
