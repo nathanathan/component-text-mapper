@@ -1,7 +1,15 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 50px;
+}
 .rule-input,
 .rule-output {
   border-radius: 5px;
-  display: inline-block;
+  display: block;
+  padding: 4px;
+  border: 0;
+  margin-bottom: 5px;
 }
 .rule-input {
   background-color: turquoise;
@@ -10,7 +18,7 @@
   margin-right: auto;
 }
 .rule-output {
-  background-color: magenta;
+  background-color: lavender;
   width: 80%;
   margin-left: auto;
   margin-right: 5px;

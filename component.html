@@ -4,9 +4,10 @@
     <p>When there is a message like ... broadcast ...</p>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-          <input class="rule-input" type="text" on-input="{{input}}" on-keypress="{{keypress}}" value="{{rule.input}}" />
-          <input class="rule-output" type="text" on-input="{{input}}" on-keypress="{{keypress}}" value="{{rule.output}}" />
+          <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
+          <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
+      <button on-click={{newRule}}>New Rule</button>
     </div>
     <shadow></shadow>
     <script type="text/json" id="ceci-definition">
@@ -195,16 +196,6 @@ var fuzzyTemplateMatch = (function(){
       rules:[],
       ready: function () {
         this.super();
-        this.addRule({
-          input : "I'm {{name}}",
-          output : "Hi {{name}}!"
-        });
-        window.setTimeout(function(){
-          this.addRule({
-            input : "I'm {{name}}",
-            output : "Hi {{name}}!"
-          });
-        }.bind(this), 10000);
       },
       __renderRules: function(){
         /*
@@ -217,8 +208,18 @@ var fuzzyTemplateMatch = (function(){
         });*/
       },
       addRule: function (rule) {
-        rule.outputTemplate = Handlebars.compile(rule.output);
-        this.rules.push(rule);
+        this.rules.push({
+          input : "I'm {{name}}",
+          output : "Hi {{name}}!",
+          setInput : function(evt){
+            console.log(evt);
+            this.input = evt.target.value();
+          },
+          setOutput : function(evt){
+            console.log(evt);
+            this.output = evt.target.value();
+          }
+        });
         this.__renderRules();
       },
       input: function (inputString) {
@@ -228,7 +229,8 @@ var fuzzyTemplateMatch = (function(){
           if(match.ld < bestMatch.ld) bestMatch = match;
           bestMatch.rule = rule;
         });
-        this.broadcast('sendOutput', bestMatch.rule.outputTemplate(bestMatch.vars));
+        var outputTemplate = Handlebars.compile(bestMatch.rule.output);
+        this.broadcast('sendOutput', outputTemplate(bestMatch.vars));
       }
     });
   </script>
