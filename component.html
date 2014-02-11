@@ -200,16 +200,16 @@ var fuzzyTemplateMatch = (function(){
           output : "Hi {{name}}!"
         });
       },
-      /*
       __renderRules: function(){
+        /*
         var that = this;
         this.rules.forEach(function(rule){
           var li = document.createElement("div");
           li.textContent = rule.input;
           //li.setAttribute("id", "chat-message-" + snapshot.name().substr(1));
           that.$.rules.appendChild(li);
-        });
-      },*/
+        });*/
+      },
       addRule: function (rule) {
         rule.outputTemplate = Handlebars.compile(rule.output);
         this.rules.push(rule);
