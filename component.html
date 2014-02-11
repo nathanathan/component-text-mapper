@@ -4,7 +4,7 @@
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <div class="delete-rule" on-click={{rule.removeRule}}>x</div>
+        <button class="delete-rule" on-click={{rule.removeRule}}>x</button>
         <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
         <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
