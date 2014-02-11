@@ -7,7 +7,7 @@
           <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
           <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
-      <button on-click={{newRule}}>New Rule</button>
+      <button on-click={{addRule}}>Add Rule</button>
     </div>
     <shadow></shadow>
     <script type="text/json" id="ceci-definition">
@@ -196,16 +196,7 @@ var fuzzyTemplateMatch = (function(){
       rules:[],
       ready: function () {
         this.super();
-      },
-      __renderRules: function(){
-        /*
-        var that = this;
-        this.rules.forEach(function(rule){
-          var li = document.createElement("div");
-          li.textContent = rule.input;
-          //li.setAttribute("id", "chat-message-" + snapshot.name().substr(1));
-          that.$.rules.appendChild(li);
-        });*/
+        this.addRule();
       },
       addRule: function (rule) {
         this.rules.push({
@@ -220,7 +211,6 @@ var fuzzyTemplateMatch = (function(){
             this.output = evt.target.value();
           }
         });
-        this.__renderRules();
       },
       input: function (inputString) {
         var bestMatch;
