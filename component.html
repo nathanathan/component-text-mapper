@@ -1,7 +1,7 @@
-<polymer-element name="ceci-text-mapper" attributes="inputname placeholdertext emitonchange label" extends="ceci-element" placeholdertext="Placeholder" inputname="Text Input">
+<polymer-element name="ceci-text-mapper" attributes="fuzzymatch" extends="ceci-element">
   <template>
     <link rel="stylesheet" href="component.css">
-    <p>When there is a message like ... broadcast ...</p>
+    <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
           <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
@@ -9,7 +9,6 @@
       </template>
       <button on-click={{addRule}}>Add Rule</button>
     </div>
-    <shadow></shadow>
     <script type="text/json" id="ceci-definition">
       {
         "tags": ["input", "form"],
@@ -200,8 +199,8 @@ var fuzzyTemplateMatch = (function(){
       },
       addRule: function (rule) {
         this.rules.push({
-          input : "I'm {{name}}",
-          output : "Hi {{name}}!",
+          input : "When there is a message like this...",
+          output : "Broadcast this...",
           setInput : function(evt){
             console.log(evt);
             this.input = evt.target.value();
@@ -216,7 +215,7 @@ var fuzzyTemplateMatch = (function(){
         var bestMatch;
         this.rules.forEach(function(rule){
           var match = fuzzyTemplateMatch(inputString, rule.input);
-          if(match.ld < bestMatch.ld) bestMatch = match;
+          if(!bestMatch || match.ld < bestMatch.ld) bestMatch = match;
           bestMatch.rule = rule;
         });
         var outputTemplate = Handlebars.compile(bestMatch.rule.output);
