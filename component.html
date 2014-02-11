@@ -39,7 +39,6 @@
           "rules": {
             "label": "ruleData",
             "description": "rules array serialized as a string",
-            //"editable": "text",
             "listener": false
           }
         }
@@ -226,7 +225,7 @@ var fuzzyTemplateMatch = (function(){
         that.rules = that.rules.filter(function(rule){
           return rule.id !== sender.id;
         });
-        this.persistedRules = JSON.stringify(this.rules);
+        //this.serializeRules();
       },
       addRule: function () {
         this.rules.push({
