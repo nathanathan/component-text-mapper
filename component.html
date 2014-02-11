@@ -4,8 +4,9 @@
     <shadow></shadow>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-          <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
-          <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
+        <div class="delete-rule" on-click="{{rule.removeRule}}">x</div>
+        <input class="rule-input" type="text" on-input="{{rule.setInput}}" on-keypress="{{rule.setInput}}" value="{{rule.input}}" />
+        <input class="rule-output" type="text" on-input="{{rule.setOutput}}" on-keypress="{{rule.setOutput}}" value="{{rule.output}}" />
       </template>
       <button on-click={{addRule}}>Add Rule</button>
     </div>
@@ -192,12 +193,13 @@ var fuzzyTemplateMatch = (function(){
   </script>
   <script>
     Polymer('ceci-text-mapper', {
-      rules:[],
       ready: function () {
         this.super();
+        this.rules = [];
         this.addRule();
       },
       addRule: function (rule) {
+        var that = this;
         this.rules.push({
           input : "When there is a message like this...",
           output : "Broadcast this...",
@@ -208,6 +210,12 @@ var fuzzyTemplateMatch = (function(){
           setOutput : function(evt){
             console.log(evt);
             this.output = evt.target.value();
+          },
+          removeRule : function() {
+            var thisRule = this;
+            that.rules = that.rules.filter(function(){
+              return rule !== thisRule;
+            });
           }
         });
       },
@@ -221,7 +229,11 @@ var fuzzyTemplateMatch = (function(){
           }
         });
         var outputTemplate = Handlebars.compile(bestMatch.rule.output);
-        this.broadcast('sendOutput', outputTemplate(bestMatch.vars));
+        var varMap = bestMatch.vars.reduce(function(sofar, curVar){
+          sofar[curVar.vName] = curVar.value;
+          return sofar;
+        }, {});
+        this.broadcast('sendOutput', outputTemplate(varMap));
       }
     });
   </script>
