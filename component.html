@@ -34,7 +34,12 @@
             "label": "Fuzziness",
             "description": "The maximum amount of fuzzyness (0-100) allowed for string matches",
             "editable": "number",
-            "default" : 20,
+            "listener": false
+          },
+          "rules": {
+            "label": "",
+            "description": "",
+            "editable": false,
             "listener": false
           }
         }
@@ -203,7 +208,6 @@ var fuzzyTemplateMatch = (function(){
     Polymer('ceci-text-mapper', {
       ready: function () {
         this.super();
-        this.rules = [];
         this.addRule();
       },
       removeRule : function(evt, detail, sender) {
