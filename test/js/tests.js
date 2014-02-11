@@ -4,7 +4,7 @@
 
   beforeEach(function (done) {
     iframeHandler = harnessUtils.createIframe('test/html/test.html', function (win, doc) {
-      textInputElement = iframeHandler.document.querySelector('ceci-text-input');
+      textInputElement = iframeHandler.document.querySelector('ceci-text-mapper');
       done();
     });
   });

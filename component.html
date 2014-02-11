@@ -1,7 +1,17 @@
-<polymer-element name="ceci-text-input" attributes="inputname placeholdertext emitonchange label" extends="ceci-element" placeholdertext="Placeholder" inputname="Text Input">
+<polymer-element name="ceci-text-mapper" attributes="inputname placeholdertext emitonchange label" extends="ceci-element" placeholdertext="Placeholder" inputname="Text Input">
   <template>
     <link rel="stylesheet" href="component.css">
     <input id="inputText" type="text" on-input="{{input}}" on-keypress="{{keypress}}" /><button id="button" on-click="{{submit}}"></button>
+    <p>When you hear...</p>
+    <p class="test-align: right;">Say...</p>
+    <ul id="rules">
+      <template repeat="{{ rule in rules }}">
+        <li>
+          <p>{{rule.input}}</p>
+          <p class="test-align: right;">{{rule.output}}</p>
+        </li>
+      </template>
+    </ul>
     <shadow></shadow>
     <script type="text/json" id="ceci-definition">
       {
@@ -10,80 +20,212 @@
         "name": "Text Input",
         "description": "A text input that broadcasts whatever a user types.",
         "broadcasts": {
-          "sendData": {
-            "label": "Send Data",
-            "description": "Occurs when button is clicked or Enter key is pressed.",
+          "sendOutput": {
+            "label": "Send Output",
+            "description": "When a string maps to an output value broadcast the output value.",
             "default": true
           }
         },
         "listeners": {
-          "click": {
-            "description": "Causes a fake click event to occur.",
-            "label": "Send Data"
+          "input": {
+            "description": "When this component hears some input text it will broadcast the value it maps to.",
+            "label": "Input"
           }
         },
         "attributes": {
-          "inputname": {
-            "label": "Input Name",
-            "description": "The name of this field, helpful when saving data.",
-            "editable": "text",
-            "listener": true,
-            "defaultListener": false
-          },
-          "placeholdertext": {
-            "label": "Placeholder Text",
-            "description": "The text you want your input field to show by default.",
-            "editable": "text",
-            "listener": true
-          },
-          "emitonchange": {
-            "label": "Emit on change",
-            "description": "Background color of the button while it is being clicked or tapped.",
+          "fuzzymatch": {
+            "label": "Fuzzy Match",
+            "description": "Use fuzzy matching.",
             "editable": "boolean",
-            "listener": true
+            "default" : true,
+            "listener": false
           }
         }
       }
     </script>
   </template>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js"></script>
   <script>
-    Polymer('ceci-text-input', {
-      emitonchange:false,
-      ready: function () {
-        this.super();
+//Not sure if relative paths are supported so I'm inlining this:
+var fuzzyTemplateMatch = (function(){
+  function find(arr, fun) {
+    for (var i = 0; i < arr.length; i++) {
+      if (fun(arr[i])) return arr[i];
+    }
+  }
+  function memoize(fun) {
+    var memos = [];
+    return function(a, b) {
+      var memo = find(memos, function(memo) {
+        return memo.a === a && memo.b === b;
+      });
+      if (memo) return memo.val;
+      memos.push({
+        a: a,
+        b: b,
+        val: fun(a, b)
+      });
+      return memos[memos.length - 1].val;
+    };
+  }
 
-        var that = this;
-        this.$.button.innerHTML = this.gettext("ceci-text-input/button") || this.$.button.innerHTML;
-      },
-      submit: function () {
-        this.broadcast('sendData', this.$.inputText.value);
-        this.$.inputText.value = "";
-      },
-      input: function (e) {
-        if (!this.emitonchange) {
-          return;
-        }
-        this.broadcast('sendData', this.$.inputText.value);
-      },
-      keypress: function (e) {
-        if (!this.emitonchange) {
-          if (e.keyCode == 13) {
-            this.broadcast('sendData', this.$.inputText.value);
-            this.$.inputText.value = '';
-          }
-        }
-      },
-      emitonchangeChanged: function(oldValue, newValue) {
-        this.classList.toggle('onchange');
-        this.$.button.classList.toggle('hidden');
-      },
-      placeholdertextChanged: function(oldValue, newValue) {
-        if (this.$.inputText.hasAttribute('placeholder')) {
-          this.$.inputText.setAttribute("placeholder", newValue);
+  var matchVarToken = /\{\{(\w*?)\}\}/;
+
+
+  function addLd(increment, ftm) {
+    var newFtm = Object.create(ftm);
+    newFtm.ld = ftm.ld + increment;
+    return newFtm;
+  }
+
+  function setVarRange(vName, idx, ftm) {
+    var newFtm = Object.create(ftm);
+    var vFound = false;
+    newFtm.vars = ftm.vars.map(function(v) {
+      if (v.vName !== vName) return v;
+      vFound = true;
+      return {
+        vName: vName,
+        start: v.start,
+        end: idx
+      };
+    });
+    if (!vFound) {
+      newFtm.vars.push({
+        vName: vName,
+        start: idx - 1,
+        end: idx
+      });
+    }
+    return newFtm;
+  }
+
+  function startVarRange(vName, idx, ftm) {
+    var newFtm = Object.create(ftm);
+    newFtm.vars = ftm.vars.map(function(v) {
+      return (v);
+    });
+    newFtm.vars.push({
+      vName: vName,
+      start: idx,
+      end: idx
+    });
+    return newFtm;
+  }
+
+  function fuzzyTemplateMatch(stringyString, templateString) {
+    //Replace all the variables with single characters,
+    //and map the locations of those characters to the variable names.
+    var offsetMap = [];
+    var vReplaced = true;
+    while (vReplaced) {
+      vReplaced = false;
+      templateString = templateString.replace(matchVarToken, function(match, vName, offset) {
+        offsetMap.push({
+          offset: offset,
+          vName: vName
+        });
+        vReplaced = true;
+        return '*';
+      });
+    }
+
+    var ftmRecurse = memoize(function(lenA, lenB) {
+      var result = {
+        vars: []
+      };
+      if (lenA === 0) {
+        result.ld = lenB;
+        result.vars = offsetMap.filter(function(x) {
+          return x.offset < lenB;
+        }).map(function(x) {
+          return {
+            vName: x.vName,
+            start: 0,
+            end: 0
+          };
+        });
+        return result;
+      }
+      if (lenB === 0) {
+        result.ld = lenA;
+        return result;
+      }
+      var pftms = [];
+
+      var vAtOffset = find(offsetMap, function(x) {
+        return x.offset === (lenB - 1);
+      });
+
+      if (vAtOffset) {
+        pftms.push(setVarRange(vAtOffset.vName, lenA, addLd(0.99, ftmRecurse(lenA - 1, lenB))));
+        pftms.push(startVarRange(vAtOffset.vName, lenA, ftmRecurse(lenA, lenB - 1)));
+      }
+      else {
+        pftms.push(addLd(1, ftmRecurse(lenA, lenB - 1)));
+        pftms.push(addLd(1, ftmRecurse(lenA - 1, lenB)));
+        if (stringyString[lenA - 1] === templateString[lenB - 1]) {
+          pftms.push(ftmRecurse(lenA - 1, lenB - 1));
         }
         else {
-          this.$.inputText.setAttribute("placeholder", newValue);
+          //I've modified the standard ld algorithm here
+          //so that substitutions have a cost of 2.
+          //pftms.push(addLd(1, ftmRecurse(lenA - 1, lenB - 1)));
         }
+      }
+
+
+      return pftms.reduce(function(minSoFar, pftm) {
+        if (!minSoFar) return pftm;
+        if (pftm.ld < minSoFar.ld) {
+          return pftm;
+        }
+        else {
+          return minSoFar;
+        }
+      });
+    });
+    var result = ftmRecurse(stringyString.length, templateString.length);
+    result.vars.forEach(function(v, i) {
+      v.value = stringyString.slice(v.start, v.end);
+    });
+    return result;
+  }
+  return fuzzyTemplateMatch;
+}());
+  </script>
+  <script>
+    Polymer('ceci-text-mapper', {
+      rules:[],
+      ready: function () {
+        this.super();
+        this.addRule({
+          input : "I'm {{name}}",
+          output : "Hi {{name}}!"
+        });
+      },
+      __renderRules: function(){
+        var that = this;
+        this.rules.forEach(function(rule){
+          var li = document.createElement("li");
+          li.textContent = rule.input;
+          //li.setAttribute("id", "chat-message-" + snapshot.name().substr(1));
+          that.$.rules.appendChild(li);
+        });
+      },
+      addRule: function (rule) {
+        rule.outputTemplate = Handlebars.complile(rule.output);
+        this.rules.push(rule);
+        this.__renderRules();
+      },
+      input: function (inputString) {
+        var bestMatch;
+        this.rules.forEach(function(rule){
+          var match = fuzzyTemplateMatch(inputString, rule.input);
+          if(match.ld < bestMatch.ld) bestMatch = match;
+          bestMatch.rule = rule;
+        });
+        this.broadcast('sendOutput', bestMatch.rule.outputTemplate(bestMatch.vars));
       }
     });
   </script>

@@ -1,13 +1,16 @@
-component-text-input
+component-text-mapper
 ================
 
-[![Build Status](https://travis-ci.org/mozilla-appmaker/component-text-input.png)](https://travis-ci.org/mozilla-appmaker/component-text-input)
+Text mapping component for [Appmaker](https://github.com/mozilla-appmaker/appmaker).
 
-Basic text input component for [Appmaker](https://github.com/mozilla-appmaker/appmaker).
+In essence, it allows users to specify a list of rules of the form
+"When I hear X broadcast Y." It has a few special features:
+* It does template matching so you can have rules like: `My name is {{name}} -> Hi {{name}}`
+* It does fuzzy matching on the input text.
 
 Appmaker import:
 ```
-<link rel="import" href="/component-text-input">
+<link rel="import" href="/component-text-mapper">
 ```
 
 # Test Status
@@ -201,7 +204,7 @@ This is the root testing file. It contains tests to run, and mechanisms to spawn
 
   beforeEach(function (done) {
     iframeHandler = harnessUtils.createIframe('test/html/test.html', function (win, doc) {
-      textInputElement = iframeHandler.document.querySelector('ceci-text-input');
+      textInputElement = iframeHandler.document.querySelector('ceci-text-mapper');
       done();
     });
   });
@@ -242,7 +245,7 @@ You can then include and instance of this repo's element in the document body:
 ```
 <body>
   <!-- The skeleton app we'll be using to test -->
-  <ceci-text-input id="ceci-text-input" value="you must construct additional pylons"></ceci-text-input>
+  <ceci-text-mapper id="ceci-text-mapper" value="you must construct additional pylons"></ceci-text-mapper>
 </body>
 </html>
 ```
@@ -257,7 +260,7 @@ Then, make sure `iframeTestUtils` is called, which will queue named tests to be 
 <script>
   iframeTestUtils(function () {
     test('example', function (done) {
-      var buttonElement = document.querySelector('ceci-text-input');
+      var buttonElement = document.querySelector('ceci-text-mapper');
       chai.assert(buttonElement.$.button, 'Button recognized and exposed by Polymer.');
       chai.assert(buttonElement.ceci.broadcasts, 'Ceci broadcasts publicized.');
       chai.assert(buttonElement.ceci.listeners, 'Ceci listeners publicized.');

@@ -13,11 +13,11 @@
 </head>
 <body>
   <!-- The skeleton app we'll be using to test -->
-  <ceci-text-input id="ceci-text-input" value="you must construct additional pylons"></ceci-text-input>
+  <ceci-text-mapper id="ceci-text-mapper" value="you must construct additional pylons"></ceci-text-mapper>
   <script>
     iframeTestUtils(function () {
       test('Sanity Check', function (done) {
-        var buttonElement = document.querySelector('ceci-text-input');
+        var buttonElement = document.querySelector('ceci-text-mapper');
         chai.assert(buttonElement.$.button, 'Button recognized and exposed by Polymer.');
         chai.assert(buttonElement.ceci.broadcasts, 'Ceci broadcasts publicized.');
         chai.assert(buttonElement.ceci.listeners, 'Ceci listeners publicized.');

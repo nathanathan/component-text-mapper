@@ -4,12 +4,12 @@
   height: 50px;
 }
 
-ceci-text-input {
+ceci-text-mapper {
   padding: 0;
   height: 3.8rem;
 }
 
-ceci-text-input input[type=text]{
+ceci-text-mapper input[type=text]{
   padding: 0;
   height: 100%;
   border: none;
@@ -33,11 +33,11 @@ ceci-text-input input[type=text]{
   font-family: "FiraSans", sans-serif;
 }
 
-ceci-text-input.onchange input[type=text]{
+ceci-text-mapper.onchange input[type=text]{
   width: 100%;
 }
 
-ceci-text-input button {
+ceci-text-mapper button {
   background: linear-gradient(to top, #f8f8f8, #ddd);
   background: -webkit-linear-gradient(top, #f8f8f8, #ddd);
   border: 0.1rem solid #a6a6a6;
@@ -51,7 +51,7 @@ ceci-text-input button {
   font-family: "FiraSans", sans-serif;
 }
 
-ceci-text-input button:active {
+ceci-text-mapper button:active {
   background: linear-gradient(to top, #ddd, #ddd);
   background: -webkit-linear-gradient(top, #ddd, #ddd);
 }
