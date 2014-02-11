@@ -17,7 +17,7 @@
       {
         "tags": ["input", "form"],
         "thumbnail": "./thumbnail.png",
-        "name": "Text Input",
+        "name": "Text Mapper",
         "description": "A text input that broadcasts whatever a user types.",
         "broadcasts": {
           "sendOutput": {
@@ -214,7 +214,7 @@ var fuzzyTemplateMatch = (function(){
         });
       },
       addRule: function (rule) {
-        rule.outputTemplate = Handlebars.complile(rule.output);
+        rule.outputTemplate = Handlebars.compile(rule.output);
         this.rules.push(rule);
         this.__renderRules();
       },
