@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  padding-top: 10px;
+  padding-top: 0.1px;
 }
 .rule-input,
 .rule-output {
@@ -28,10 +28,35 @@
   float: right;
   background-color: red;
   color: white;
-  margin: 5px;
+  margin: 0px 5px;
   width: 18px;
   text-align: center;
   height: 18px;
   font-weight: bold;
   border: 0;
+}
+.title-text {
+  margin: 5px;
+}
+.appmaker-btn {
+  line-height: 2em;
+  width: 50%;
+  margin: 5px auto;
+  background-image: -webkit-linear-gradient(top, rgb(248, 248, 248), rgb(221, 221, 221));
+  border: 0.1rem solid rgb(166, 166, 166);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+  border-bottom-left-radius: 0px;
+  padding: 0px;
+  font-weight: 500;
+  font-size: 1.6rem;
+  font-family: FiraSans, sans-serif;
+  background-position: initial initial;
+  background-repeat: initial initial;
+}
+.appmaker-btn:active {
+  background-image: -webkit-linear-gradient(top, rgb(221, 221, 221), rgb(221, 221, 221));
+  background-position: initial initial;
+  background-repeat: initial initial;
 }

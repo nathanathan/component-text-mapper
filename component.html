@@ -2,13 +2,16 @@
   <template>
     <link rel="stylesheet" href="component.css">
     <shadow></shadow>
+    <h3 class="title-text">Text Mapper</h3>
     <div id="rules">
       <template id="rules-template" repeat="{{ rule in rules }}">
-        <button class="delete-rule" on-click="{{removeRule}}" id="{{rule.id}}">x</button>
-        <input class="rule-input" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.input}}" />
-        <input class="rule-output" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.output}}" />
+        <div class="rule">
+          <button class="delete-rule" on-click="{{removeRule}}" id="{{rule.id}}">x</button>
+          <input class="rule-input" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.input}}" />
+          <input class="rule-output" type="text" on-input={{serializeRules}} on-keypress={{serializeRules}} value="{{rule.output}}" />
+        </div>
       </template>
-      <center><button on-click="{{addRule}}">Add Rule</button></center>
+      <center><button class="appmaker-btn" on-click="{{addRule}}">Add Rule</button></center>
     </div>
     <script type="text/json" id="ceci-definition">
       {
@@ -39,7 +42,7 @@
           "persistedRules": {
             "label": "Rule Data",
             "description": "rules array serialized as a string",
-            "editable": "text",
+            "editable": false,
             "listener": false
           }
         }
